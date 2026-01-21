@@ -393,6 +393,10 @@ if not args.skip_validation:
             **distributed_kwargs,
         )
     validation_model.eval()
+    validation_model.torch.compile(
+        validation_model,
+        backend="inductor"
+    )
 
 # warmup with any input so compiler produces criteria json
 # TODO: Swap this with __prepare_inputs once fix for shape_id is available
