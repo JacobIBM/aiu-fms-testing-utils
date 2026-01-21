@@ -393,7 +393,7 @@ if not args.skip_validation:
             **distributed_kwargs,
         )
     validation_model.eval()
-    validation_model.torch.compile(
+    validation_model = torch.compile(
         validation_model,
         backend="inductor"
     )
