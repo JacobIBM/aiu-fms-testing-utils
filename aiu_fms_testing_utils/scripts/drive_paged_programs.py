@@ -393,12 +393,14 @@ if not args.skip_validation:
             **distributed_kwargs,
         )
     validation_model.eval()
+    dprint("TST: About to Compile Graph with fullgraph FALSE and dynamic TRUE")
     validation_model = torch.compile(
         validation_model,
         backend="inductor",
         fullgraph=False,  # Allow graph breaks for dynamic behavior
         dynamic=True      # Support dynamic shapes
     )
+    dprint("TST: Post Compile Graph with fullgraph FALSE and dynamic TRUE")
 
 # warmup with any input so compiler produces criteria json
 # TODO: Swap this with __prepare_inputs once fix for shape_id is available
@@ -677,6 +679,7 @@ for program_id, valid_prompt, input_ids, extra_kwargs, sample_key in valid_promp
         )
         # if the cpu validation info is not yet computed, compute it
         if cpu_validation_info is None:
+            dprint("TST: About to extract_validation_information")
             cpu_validation_info = extract_validation_information(
                 validation_model,
                 input_ids,
@@ -685,6 +688,7 @@ for program_id, valid_prompt, input_ids, extra_kwargs, sample_key in valid_promp
                 attn_algorithm="math",
                 **extra_kwargs,
             )
+            dprint("TST: Post extract_validation_information")
             # save the cpu validation info for later consumption
             if save_validation_info_outputs:
                 cpu_validation_info.save(
@@ -700,6 +704,8 @@ for program_id, valid_prompt, input_ids, extra_kwargs, sample_key in valid_promp
                         sample_key=sample_key,
                     )
                 )
+
+        dprint("TST: POST cpu validation not set")
 
         if args.test_type == "metrics":
             aiu_validation_info = extract_validation_information(
