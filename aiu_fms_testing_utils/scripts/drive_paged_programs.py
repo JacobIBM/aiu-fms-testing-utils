@@ -692,6 +692,8 @@ for program_id, valid_prompt, input_ids, extra_kwargs, sample_key in valid_promp
         # if the cpu validation info is not yet computed, compute it
         if cpu_validation_info is None:
             dprint("TST: About to extract_validation_information")
+            extra_kwargs["attn_name"] = "None"
+            dprint("SKIPPING PAGED ATTENTION")
             cpu_validation_info = extract_validation_information(
                 validation_model,
                 input_ids,
