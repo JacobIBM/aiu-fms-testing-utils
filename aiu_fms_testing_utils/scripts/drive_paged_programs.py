@@ -395,7 +395,9 @@ if not args.skip_validation:
     validation_model.eval()
     validation_model = torch.compile(
         validation_model,
-        backend="inductor"
+        backend="inductor",
+        fullgraph=False,  # Allow graph breaks for dynamic behavior
+        dynamic=True      # Support dynamic shapes
     )
 
 # warmup with any input so compiler produces criteria json
