@@ -286,6 +286,7 @@ def extract_validation_information(
     if attn_algorithm is not None:
         extra_generation_kwargs["attn_algorithm"] = attn_algorithm
 
+    dprint("TST: Prior to generate Call")
     result = generate(
         model,
         input_ids,
@@ -298,6 +299,7 @@ def extract_validation_information(
         extra_kwargs=extra_generation_kwargs,
         **attention_specific_kwargs,
     )
+    dprint("TST: Post to generate Call")
 
     if timing != "":
         dprint(
